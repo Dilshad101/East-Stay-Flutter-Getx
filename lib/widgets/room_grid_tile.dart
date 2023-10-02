@@ -1,12 +1,17 @@
-
+import 'package:east_stay_vendor/model/room_model.dart';
+import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_key_value_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class RoomGridTile extends StatelessWidget {
-  const RoomGridTile({
+   RoomGridTile({
     super.key,
+    required this.room,
   });
-
+  final RoomView room;
+  final vendor=Get.find<VendorController>().vendor;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,8 +30,7 @@ class RoomGridTile extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             decoration: const BoxDecoration(
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(6),
@@ -34,35 +38,35 @@ class RoomGridTile extends StatelessWidget {
               ),
               color: Colors.white,
             ),
-            child:  const Column(
+            child:  Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 KeyValueText(
-                  text1: 'Hotel Paragon',
-                  text2: '₹ 5000',
+                  text1: vendor.value.propertyName,
+                  text2: '₹ ${room.price}',
                   fontFamily: 'Ubuntu',
                   size1: 13,
                   size2: 14,
                   color1: Colors.black87,
-                  color2: Color(0xffE55959),
+                  color2:  AppColor.primaryColor,
                   fontWeight1: FontWeight.w600,
                   fontWeight2: FontWeight.w600,
                 ),
-                Row(
+                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.location_on_outlined,
                       size: 15,
-                      color: Color(0xFF616161),
+                      color:  AppColor.textSecondary,
                     ),
                     Expanded(
                       child: Text(
-                        'Calicut Kerela',
-                        style: TextStyle(
+                        room.city,
+                        style: const TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w600,
-                            color: Color(0xFF616161),
+                            color:  AppColor.textSecondary,
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),

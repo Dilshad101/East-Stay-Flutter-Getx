@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view_model/coupon_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_text_field.dart';
 import 'package:east_stay_vendor/widgets/primary_button.dart';
@@ -52,7 +53,7 @@ class ScreenCoupon extends StatelessWidget {
   getbottomsheet(BuildContext context) {
     Get.bottomSheet(
       isScrollControlled: true,
-      backgroundColor: const Color(0xffEDEFF0),
+      backgroundColor:  AppColor.backgroundColor,
       Container(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,

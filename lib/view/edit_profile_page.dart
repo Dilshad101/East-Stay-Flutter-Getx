@@ -1,4 +1,5 @@
-import 'package:east_stay_vendor/view_model/vendor_controller.dart';
+import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/view_model/profile_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_text_field.dart';
 import 'package:east_stay_vendor/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +8,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ScreenEditProfile extends StatelessWidget {
   ScreenEditProfile({super.key});
-  final nameController = TextEditingController();
-  final emailController = TextEditingController();
-  final numberController = TextEditingController();
-  final propertyController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final profileController = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +26,17 @@ class ScreenEditProfile extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
           width: double.maxFinite,
           child: Form(
-            key: _formKey,
+            key: profileController.editFormKey,
             child: Column(
               children: [
                 const SizedBox(height: 20),
                 CircleAvatar(
                     radius: 75,
-                    backgroundColor: const Color(0xffEDEFF0),
+                    backgroundColor: AppColor.backgroundColor,
                     child: Stack(
                       children: [
                         //profile image
-                        GetBuilder<VendorController>(
+                        GetBuilder<ProfileController>(
                           builder: (controller) => CircleAvatar(
                             radius: 60,
                             backgroundColor: Colors.grey,
@@ -74,25 +71,29 @@ class ScreenEditProfile extends StatelessWidget {
                 CustomTextField(
                   label: 'Name',
                   icon: Icons.person,
-                  controller: nameController,
+                  controller: profileController.nameController,
+                  validator: (value) => profileController.isEmpty(value!),
                 ),
                 const SizedBox(height: 15),
                 CustomTextField(
                   label: 'Email',
                   icon: Icons.mail_outline_outlined,
-                  controller: emailController,
+                  controller: profileController.emailController,
+                  validator: (value) => profileController.isEmail(value!),
                 ),
                 const SizedBox(height: 15),
                 CustomTextField(
-                  label: 'Mobile number',
-                  icon: Icons.call_outlined,
-                  controller: numberController,
-                ),
-                const SizedBox(height: 15),
-                CustomTextField(
-                  label: 'Property name',
+                  label: 'Property Name',
                   icon: Icons.home_work_outlined,
-                  controller: propertyController,
+                  controller: profileController.propertyController,
+                  validator: (value) => profileController.isEmpty(value!),
+                ),
+                const SizedBox(height: 15),
+                CustomTextField(
+                  label: 'Property Location',
+                  icon: Icons.call_outlined,
+                  controller: profileController.locationController,
+                  validator: (value) => profileController.isEmpty(value!),
                 ),
               ],
             ),
@@ -103,7 +104,7 @@ class ScreenEditProfile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
         child: PrimaryButton(
             onPressed: () {
-              editProfile();
+              profileController.validateFields();
             },
             label: 'Done'),
       ),
@@ -113,9 +114,7 @@ class ScreenEditProfile extends StatelessWidget {
   void getProfileImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
-      Get.find<VendorController>().setProfileImage(image.path);
+      profileController.setProfileImage(image.path);
     }
   }
-
-  void editProfile() {}
 }

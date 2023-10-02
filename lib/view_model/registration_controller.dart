@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:east_stay_vendor/model/vendor_model.dart';
@@ -51,17 +52,26 @@ class RegistrationController extends GetxController {
         final response = await Api.instance.signupVendor(vendorData);
         if (response['status'] == 'success') {
           final String token = response['token'];
-          final vendorData = await api.getVendorData(token);
 
-          final vendor = VendorModel.fromJson(vendorData['vendorDetails'])
-            ..token = token;
-          Get.find<VendorController>().setVendor(vendor);
-          Get.off(() => ScreenParent());
-          Get.showSnackbar(getxSnackbar(
-            message: 'Account created successfully',
-            isError: F,
-          ));
-          showLoading.value = false;
+          final result = await api.getVendorData(token);
+          if (result.statusCode == 200) {
+            final vendorData = jsonDecode(result.body);
+            final vendor = VendorModel.fromJson(vendorData['vendorDetails'])
+              ..token = token;
+            Get.find<VendorController>().setVendor(vendor);
+            Get.off(() => ScreenParent());
+            Get.showSnackbar(getxSnackbar(
+              message: 'Account created successfully',
+              isError: F,
+            ));
+            showLoading.value = false;
+          } else {
+            showLoading.value = false;
+            Get.showSnackbar(getxSnackbar(
+              message: 'Oops, an error occurred',
+              isError: T,
+            ));
+          }
         } else {
           showLoading.value = false;
           Get.showSnackbar(getxSnackbar(

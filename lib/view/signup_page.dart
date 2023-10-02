@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:east_stay_vendor/services/api_services.dart';
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
 import 'package:east_stay_vendor/view_model/registration_controller.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class ScreenSignUp extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xff232323),
+                        color: AppColor.secondaryColor,
                       ),
                     ),
                     GestureDetector(
@@ -91,7 +92,7 @@ class ScreenSignUp extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 const Divider(
-                    height: 1, color: Color(0xff484848), thickness: 1),
+                    height: 1, color: AppColor.textPrimary, thickness: 1),
                 const SizedBox(height: 15),
 //Sub pages
                 Expanded(
@@ -112,8 +113,8 @@ class ScreenSignUp extends StatelessWidget {
                   child: SmoothPageIndicator(
                     controller: pageController,
                     count: 2,
-                    effect: const ScrollingDotsEffect(
-                        activeDotColor: Color(0xffE55959),
+                    effect:  const ScrollingDotsEffect(
+                        activeDotColor: AppColor.primaryColor,
                         dotHeight: 10,
                         dotWidth: 10),
                   ),

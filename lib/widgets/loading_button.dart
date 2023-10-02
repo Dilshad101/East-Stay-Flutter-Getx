@@ -1,4 +1,5 @@
 
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class LoadingButton extends StatelessWidget {
           onPressed: onPressed,
           style: ButtonStyle(
               backgroundColor:
-                  MaterialStateProperty.all(const Color(0xffE55959))),
+                  MaterialStateProperty.all( AppColor.primaryColor)),
           child: showLoading.value
               ? Transform.scale(
                   scale: .5,

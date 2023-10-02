@@ -1,4 +1,6 @@
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view/room_details_page.dart';
+import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/room_grid_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +18,7 @@ class ScreenRooms extends StatelessWidget {
             radius: 21,
             backgroundColor: Colors.grey,
             child: CircleAvatar(
-              backgroundColor: const Color(0xffEDEFF0),
+              backgroundColor:  AppColor.backgroundColor,
               child: IconButton(
                 onPressed: () {},
                 icon: const Icon(Icons.search_rounded, color: Colors.black87),
@@ -25,7 +27,7 @@ class ScreenRooms extends StatelessWidget {
           ),
           const SizedBox(width: 10),
           CircleAvatar(
-            backgroundColor: const Color(0xffE55959),
+            backgroundColor:  AppColor.primaryColor,
             child: IconButton(
               onPressed: () {},
               icon: const Icon(Icons.add, color: Colors.white),
@@ -34,18 +36,32 @@ class ScreenRooms extends StatelessWidget {
           const SizedBox(width: 15),
         ],
       ),
-      body: GridView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        physics: const BouncingScrollPhysics(
-            decelerationRate: ScrollDecelerationRate.fast),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
-        itemCount: 15,
-        itemBuilder: (context, index) => GestureDetector(
-          onTap: () => Get.to(const ScreenRoomDetails(),
-              transition: Transition.cupertinoDialog),
-          child: const RoomGridTile(),
-        ),
+      body: GetBuilder<VendorController>(
+        builder: (controller) {
+          return GridView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            physics: const BouncingScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemCount: controller.vendorRooms.length,
+            itemBuilder: (context, index) => Obx(
+              ()=> GestureDetector(
+                onTap: () => Get.to(
+                  () => ScreenRoomDetails(
+                    room: controller.vendorRooms[index],
+                  ),
+                  transition: Transition.cupertinoDialog,
+                ),
+                child: RoomGridTile(
+                  room: controller.vendorRooms[index].value,
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

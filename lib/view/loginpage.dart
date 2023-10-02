@@ -1,3 +1,4 @@
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view/signup_page.dart';
 import 'package:east_stay_vendor/view_model/login_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_text_field.dart';
@@ -53,7 +54,7 @@ class ScreenLogin extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
-                        color: Color(0xff232323),
+                        color: AppColor.secondaryColor,
                       ),
                     ),
                     GestureDetector(
@@ -77,7 +78,7 @@ class ScreenLogin extends StatelessWidget {
                 ),
                 const SizedBox(height: 15),
                 const Divider(
-                    height: 1, color: Color(0xff484848), thickness: 1),
+                    height: 1, color: AppColor.textPrimary, thickness: 1),
                 const SizedBox(height: 30),
                 Expanded(
                   child: Form(

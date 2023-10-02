@@ -1,3 +1,4 @@
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/utils/dependency_binding.dart';
 import 'package:east_stay_vendor/view/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -21,14 +22,14 @@ class MyApp extends StatelessWidget {
       initialBinding: InitController(),
       theme: ThemeData(
         fontFamily: 'Poppins',
-        scaffoldBackgroundColor: const Color(0xffEDEFF0),
+        scaffoldBackgroundColor:  AppColor.backgroundColor,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xffEDEFF0),
+          backgroundColor: AppColor.backgroundColor,
           centerTitle: true,
           elevation: .5,
           titleTextStyle: TextStyle(
             fontSize: 18,
-            color: Color(0xff232323),
+            color: AppColor.secondaryColor,
             fontWeight: FontWeight.w600,
             fontFamily: 'Poppins',
           ),

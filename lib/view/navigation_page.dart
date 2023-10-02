@@ -1,3 +1,4 @@
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view/booked_room_page.dart';
 import 'package:east_stay_vendor/view/home_page.dart';
 import 'package:east_stay_vendor/view/room_list_page.dart';
@@ -15,7 +16,7 @@ class ScreenParent extends StatelessWidget {
     ScreenHome(),
     const ScreenRooms(),
     const ScreenBookingDetails(),
-    const ScreenSettings()
+     ScreenSettings()
   ];
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class ScreenParent extends StatelessWidget {
             type: BottomNavigationBarType.fixed,
             currentIndex: controller.currentPage,
             onTap: (value) => controller.changePage(value),
-            selectedItemColor: const Color(0xffE55959),
+            selectedItemColor:  AppColor.primaryColor,
             unselectedItemColor: Colors.grey[400],
             showSelectedLabels: F,
             showUnselectedLabels: F,

@@ -1,3 +1,4 @@
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -18,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
             backgroundColor:
-                MaterialStateProperty.all(const Color(0xffE55959))),
+                MaterialStateProperty.all( AppColor.primaryColor)),
         onPressed: onPressed,
         child: Text(
           label,

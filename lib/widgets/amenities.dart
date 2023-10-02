@@ -1,18 +1,20 @@
-
+import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Amenities extends StatelessWidget {
   const Amenities({
     super.key,
+    required this.amenities,
   });
-
+  final List<String> amenities;
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      itemCount: 4,
+      itemCount: amenities.length,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4,
         mainAxisSpacing: 5,
@@ -25,14 +27,16 @@ class Amenities extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
           color: Colors.white,
         ),
-        child: const Column(
+        child:  Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.wifi, size: 30),
-            SizedBox(height: 5),
-            Text('Wifi',
-                style: TextStyle(
-                    fontSize: 12, fontWeight: FontWeight.w600)),
+             Icon(Get.find<VendorController>().amenities[amenities[index]]),
+            const SizedBox(height: 5),
+            Text(amenities[index],
+                style: const TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                )),
           ],
         ),
       ),

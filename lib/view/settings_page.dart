@@ -1,13 +1,15 @@
 import 'package:east_stay_vendor/view/coupon_page.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
 import 'package:east_stay_vendor/view/profile_page.dart';
+import 'package:east_stay_vendor/view_model/vendor_controller.dart';
+import 'package:east_stay_vendor/widgets/custom_popup.dart';
 import 'package:east_stay_vendor/widgets/custom_settings_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ScreenSettings extends StatelessWidget {
-  const ScreenSettings({super.key});
-
+  ScreenSettings({super.key});
+  final vendor = Get.find<VendorController>().vendor;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,12 +30,14 @@ class ScreenSettings extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Text(
-                  'Robert',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                Obx(
+                  () => Text(
+                    vendor.value.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
                   ),
                 )
               ],
@@ -42,8 +46,7 @@ class ScreenSettings extends StatelessWidget {
             CustomSettingsTile(
               title: "Your Profile",
               ontap: () {
-                Get.to(() => const ScreenProfile(),
-                    transition: Transition.topLevel);
+                Get.to(() => ScreenProfile(), transition: Transition.topLevel);
               },
               icon: Icons.person_outline_rounded,
             ),
@@ -76,32 +79,24 @@ class ScreenSettings extends StatelessWidget {
             const SizedBox(height: 10),
             CustomSettingsTile(
               title: "Sign out",
-              ontap: showPopup,
+              ontap: () {
+                showPopup(
+                  title: 'Sign out',
+                  subtitle: 'Sign out your account',
+                  buttonText: 'Sign out',
+                  onProceed: () {
+                    Get.offUntil(
+                      MaterialPageRoute(builder: (_) => ScreenLogin()),
+                      (route) => false,
+                    );
+                  },
+                  onCancelled: () => Get.back(),
+                );
+              },
               icon: Icons.logout_rounded,
               removeArrow: true,
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  showPopup() {
-    Get.defaultDialog(
-      middleText: 'Sign out your account ?',
-      title: 'Sign out',
-      cancel:
-          TextButton(onPressed: () => Get.back(), child: const Text('Cancel')),
-      confirm: TextButton(
-        onPressed: () {
-          Get.offUntil(
-            MaterialPageRoute(builder: (_) => ScreenLogin()),
-            (route) => false,
-          );
-        },
-        child: const Text(
-          'Sign out',
-          style: TextStyle(color: Color(0xffE55959)),
         ),
       ),
     );

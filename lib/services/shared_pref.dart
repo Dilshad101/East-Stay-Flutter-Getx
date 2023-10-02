@@ -5,10 +5,13 @@ class SharedPref {
   SharedPref._();
   static final SharedPref _instence = SharedPref._();
   static SharedPref get instence => _instence;
+
   static const String email = 'email';
   static const String token = 'token';
   static const String password = 'password';
+
   late SharedPreferences sharedPref;
+
   initStorage() async {
     sharedPref = await SharedPreferences.getInstance();
   }

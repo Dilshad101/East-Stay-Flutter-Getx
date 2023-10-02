@@ -16,20 +16,16 @@ class Api {
     return jsonDecode(response.body);
   }
 
-  Future<Map<String, dynamic>> loginVendor(Map<String, dynamic> vendor) async {
+  Future<http.Response> loginVendor(Map<String, dynamic> vendor) async {
     final body = jsonEncode(vendor);
     final url = Uri.parse('${Url.baseUrl}${Url.login}');
-    final response = await http.post(url, body: body, headers: _header);
-    final result = jsonDecode(response.body);
-
-    return result;
+    return await http.post(url, body: body, headers: _header);
   }
 
-  Future<Map<String, dynamic>> getVendorData(String token) async {
+  Future<http.Response> getVendorData(String token) async {
     final vendorToken = {'vendortoken': token};
     final url = Uri.parse('${Url.baseUrl}${Url.getVendor}');
-    final response = await http.get(url, headers: vendorToken);
-    return jsonDecode(response.body);
+    return await http.get(url, headers: vendorToken);
   }
 
   Future<Map<String, dynamic>> getAllRooms(String token) async {
@@ -49,5 +45,35 @@ class Api {
     final body = jsonEncode(room);
     final response = await http.post(url, body: body, headers: vendorToken);
     return jsonDecode(response.body);
+  }
+
+  Future<http.Response> editVendor(Map vendorData, String token) async {
+    final vendorToken = {
+      'vendortoken': token,
+      'Content-Type': 'application/json'
+    };
+    final url = Uri.parse('${Url.baseUrl}${Url.editVendor}');
+    final body = jsonEncode(vendorData);
+    return await http.patch(url, body: body, headers: vendorToken);
+  }
+
+  Future<http.Response> deleteRoom(String token, String roomId) async {
+    final url = Url.baseUrl + Url.deleteRoom.replaceFirst('roomId', roomId);
+    final vendorToken = {
+      'vendortoken': token,
+      'Content-Type': 'application/json'
+    };
+    return await http.delete(Uri.parse(url), headers: vendorToken);
+  }
+
+  Future<http.Response> updateRoom(
+      String token, Map room, String roomid) async {
+    final url = Url.baseUrl + Url.updateRoom.replaceFirst('roomId', roomid);
+    final vendorToken = {
+      'vendortoken': token,
+      'Content-Type': 'application/json'
+    };
+    final body = jsonEncode(room);
+    return http.put(Uri.parse(url), body: body, headers: vendorToken);
   }
 }

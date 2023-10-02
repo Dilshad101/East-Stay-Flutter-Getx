@@ -1,3 +1,4 @@
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:icons_plus/icons_plus.dart';
 
@@ -47,7 +48,7 @@ class RecentBookingTile extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: Color(0xffE55959)),
+                          color: AppColor.primaryColor),
                     )
                   ],
                 ),
@@ -56,7 +57,7 @@ class RecentBookingTile extends StatelessWidget {
                     Icon(
                       Icons.location_on_outlined,
                       size: 14,
-                      color: Color(0xFF616161),
+                      color:  AppColor.textSecondary,
                     ),
                     SizedBox(width: 5),
                     Expanded(
@@ -64,7 +65,7 @@ class RecentBookingTile extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w500,
-                              color: Color(0xFF616161),
+                              color:  AppColor.textSecondary,
                               overflow: TextOverflow.ellipsis)),
                     ),
                   ],
@@ -75,7 +76,7 @@ class RecentBookingTile extends StatelessWidget {
                     Icon(
                       LineAwesome.calendar_check,
                       size: 14,
-                      color: Color(0xFF616161),
+                      color:  AppColor.textSecondary,
                     ),
                     SizedBox(width: 5),
                     Text(
@@ -83,7 +84,7 @@ class RecentBookingTile extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xFF616161),
+                        color:  AppColor.textSecondary,
                       ),
                     ),
                   ],

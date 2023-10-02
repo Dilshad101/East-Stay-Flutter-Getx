@@ -1,25 +1,25 @@
 import 'package:east_stay_vendor/model/vendor_model.dart';
 
 class RoomView {
-  final String id;
-  final VendorModel vendor;
-  final String address;
-  final String city;
-  final String state;
-  final String zip;
-  final List<String> img;
-  final String propertyType;
-  final String description;
-  final String price;
-  final String capacity;
-  final String totalRooms;
-  final String adultsRate;
-  final String location;
-  final String longitude;
-  final double latitude;
-  final String category;
-  final List<String> amenities;
-  final bool isApproved;
+  String id;
+  VendorModel vendor;
+  String address;
+  String city;
+  String state;
+  String zip;
+  List<String> img;
+  String propertyType;
+  String description;
+  String price;
+  String capacity;
+  String totalRooms;
+  String adultsRate;
+  String location;
+  String longitude;
+  double latitude;
+  String category;
+  List<String> amenities;
+  bool isApproved;
 
   RoomView({
     required this.id,
@@ -51,7 +51,8 @@ class RoomView {
       city: json['city'],
       state: json['state'],
       zip: json['zip'],
-      img: [],/*List<String>.from(json['img']),*/
+      img: [],
+      /*List<String>.from(json['img']),*/
       propertyType: json['propertyType'],
       description: json['description'],
       price: json['price'],

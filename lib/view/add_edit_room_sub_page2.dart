@@ -1,4 +1,4 @@
-
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view_model/room_controller.dart';
 import 'package:east_stay_vendor/widgets/drop_down_button.dart';
 import 'package:flutter/material.dart';
@@ -39,14 +39,16 @@ class AddRoomSubScreen2 extends StatelessWidget {
                 onTap: () {
                   roomController.updateAmenities(
                       index: index,
-                      isAdd: !roomController.selectedAmenities.contains(index));
+                      isAdd: !roomController.selectedAmenities
+                          .contains(roomController.amenities[index]));
                 },
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey[300]!),
                     borderRadius: BorderRadius.circular(6),
-                    color: roomController.selectedAmenities.contains(index)
-                        ? const Color(0xff232323)
+                    color: roomController.selectedAmenities
+                            .contains(roomController.amenities[index])
+                        ? AppColor.secondaryColor
                         : Colors.white,
                   ),
                   child: Column(
@@ -55,9 +57,10 @@ class AddRoomSubScreen2 extends StatelessWidget {
                       Icon(
                         icons[index],
                         size: 25,
-                        color: roomController.selectedAmenities.contains(index)
+                        color: roomController.selectedAmenities
+                                .contains(roomController.amenities[index])
                             ? Colors.white
-                            : const Color(0xff232323),
+                            : AppColor.secondaryColor,
                       ),
                       Text(
                         items[index],
@@ -65,10 +68,10 @@ class AddRoomSubScreen2 extends StatelessWidget {
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           letterSpacing: .8,
-                          color:
-                              roomController.selectedAmenities.contains(index)
-                                  ? Colors.white
-                                  : const Color(0xff232323),
+                          color: roomController.selectedAmenities
+                                  .contains(roomController.amenities[index])
+                              ? Colors.white
+                              : AppColor.secondaryColor,
                         ),
                       )
                     ],

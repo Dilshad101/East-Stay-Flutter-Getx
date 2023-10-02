@@ -1,5 +1,5 @@
-import 'package:east_stay_vendor/services/api_services.dart';
-import 'package:east_stay_vendor/view/add_room_page.dart';
+import 'package:east_stay_vendor/view/add_edit_room_page.dart';
+import 'package:east_stay_vendor/view/search_page.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,10 +18,11 @@ class CustomAppBar extends StatelessWidget {
       child: Row(
         children: [
           CircleAvatar(
-            radius: 20,
-            backgroundColor: Colors.grey,
-            child: Text(vendorController.vendor.name[0]),
-          ),
+              radius: 20,
+              backgroundColor: Colors.grey,
+              child: Obx(
+                () => Text(vendorController.vendor.value.name[0]),
+              )),
           const Spacer(),
           PopupMenuButton(
             icon: const Icon(Icons.more_vert_rounded),
@@ -58,33 +59,14 @@ class CustomAppBar extends StatelessWidget {
                 ),
               )
             ],
-            onSelected: (value) async{
+            onSelected: (value) async {
               if (value == 1) {
                 Get.to(() => ScreenAddRoom());
               } else {
-                print('object');
-               await Get.find<VendorController>().getVendorRooms();
+                Get.to(() =>  ScreenSearch());
               }
             },
           )
-          // CircleAvatar(
-          //   radius: 20,
-          //   backgroundColor: Colors.grey,
-          //   child: GestureDetector(
-          //     onTap: () => Get.to(()=>const ScreenSearch()),
-          //     child: const CircleAvatar(
-          //       radius: 19,
-          //       backgroundColor: Color(0xffEDEFF0),
-          //       child: Icon(Icons.search_rounded, color: Colors.black87),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(width: 10),
-          // const CircleAvatar(
-          //   backgroundColor: Color(0xffE55959),
-          //   radius: 20,
-          //   child: Icon(Icons.add, color: Colors.white),
-          // ),
         ],
       ),
     );

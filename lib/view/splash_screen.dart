@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:east_stay_vendor/model/vendor_model.dart';
 import 'package:east_stay_vendor/services/api_services.dart';
 import 'package:east_stay_vendor/services/shared_pref.dart';
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
 import 'package:east_stay_vendor/view/navigation_page.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
@@ -23,6 +26,7 @@ class _ScreenSplashScreenState extends State<ScreenSplashScreen> {
     validateVendor();
   }
 
+  final controller = Get.find<VendorController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +47,11 @@ class _ScreenSplashScreenState extends State<ScreenSplashScreen> {
                   const ColorFilter.mode(Colors.black, BlendMode.srcIn),
             ),
             SizedBox(
-              height: MediaQuery.sizeOf(context).height * .10,
-              width: MediaQuery.sizeOf(context).height * .10
+                height: MediaQuery.sizeOf(context).height * .10,
+                width: MediaQuery.sizeOf(context).height * .10),
+            CircularProgressIndicator(
+              color: AppColor.primaryColor.withOpacity(.8),
             ),
-              CircularProgressIndicator(
-               color: const Color(0xffE55959).withOpacity(.8),
-             ),
           ],
         ),
       ),
@@ -59,14 +62,21 @@ class _ScreenSplashScreenState extends State<ScreenSplashScreen> {
     final token = await SharedPref.instence.getVendor();
     if (token != null) {
       try {
-        final vendorData = await Api.instance.getVendorData(token);
-        if (!vendorData['auth']) {
+        final response = await Api.instance.getVendorData(token);
+        if (response.statusCode == 200) {
+          final vendorData = jsonDecode(response.body);
+          if (!vendorData['auth']) {
+            Get.off(() => ScreenLogin());
+            return;
+          }
+          final vendor = VendorModel.fromJson(vendorData['vendorDetails'])
+            ..token = token;
+          controller.setVendor(vendor);
+          await controller.getVendorRooms();
+          Get.off(() => ScreenParent());
+        } else {
           Get.off(() => ScreenLogin());
         }
-        final vendor = VendorModel.fromJson(vendorData['vendorDetails'])
-          ..token = token;
-         Get.find<VendorController>().setVendor(vendor);
-        Get.off(() => ScreenParent());
       } catch (e) {
         Get.off(() => ScreenLogin());
       }

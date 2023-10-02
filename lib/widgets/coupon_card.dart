@@ -1,8 +1,7 @@
-
+import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/widgets/custom_key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'coupon_text.dart';
 
 class CouponCard extends StatelessWidget {
   const CouponCard({
@@ -30,8 +29,7 @@ class CouponCard extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border(
                 right: BorderSide(
-                    color: const Color(0xff808080).withOpacity(.38),
-                    width: .5),
+                    color: const Color(0xff808080).withOpacity(.38), width: .5),
               ),
             ),
             alignment: Alignment.center,
@@ -44,27 +42,64 @@ class CouponCard extends StatelessWidget {
           const Expanded(
               child: Column(
             children: [
-              CouponText(
-                text1: 'Coupon code',
+              // CouponText(
+              //   text1: 'Coupon code',
+              //   text2: 'STAYFIRST',
+              //   size1: 14,
+              //   size2: 15,
+              //   isBold: true,
+              // ),
+              KeyValueText(
+                text1: 'Coupn code',
                 text2: 'STAYFIRST',
                 size1: 14,
                 size2: 15,
-                isBold: true,
+                color1: AppColor.textPrimary,
+                color2: Colors.black87,
+                fontWeight2: FontWeight.bold,
               ),
-              CouponText(
+              // CouponText(
+              //   text1: 'Discount',
+              //   text2: '400',
+              //   size1: 14,
+              //   size2: 15,
+              //   isBold: true,
+              // ),
+               KeyValueText(
                 text1: 'Discount',
-                text2: '400',
+                text2: ' ₹ 400',
                 size1: 14,
                 size2: 15,
-                isBold: true,
+                color1: AppColor.textPrimary,
+                color2: Colors.black87,
+                fontWeight2: FontWeight.bold,
+                fontFamily: 'Ubuntu',
               ),
-              CouponText(
+              // CouponText(
+              //   text1: 'From',
+              //   text2: '18-9-2023',
+              // ),
+               KeyValueText(
                 text1: 'From',
                 text2: '18-9-2023',
+                size1: 12,
+                size2: 12,
+                color1: AppColor.textPrimary,
+                color2: AppColor.textSecondary,
+               
               ),
-              CouponText(
+              // CouponText(
+              //   text1: 'To',
+              //   text2: '18-12-2023',
+              // ),
+               KeyValueText(
                 text1: 'To',
-                text2: '18-12-2023',
+                text2: '18-9-2023',
+                size1: 12,
+                size2: 12,
+                color1: AppColor.textPrimary,
+                color2: AppColor.textSecondary,
+               
               ),
             ],
           ))
@@ -73,4 +108,3 @@ class CouponCard extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,5 @@
 
+import 'package:east_stay_vendor/utils/constents/colors.dart';
 import 'package:flutter/material.dart';
 
 class Dividertext extends StatelessWidget {
@@ -27,7 +28,7 @@ class Dividertext extends StatelessWidget {
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w600,
-            color: Color(0xff484848),
+            color: AppColor.textPrimary,
           ),
         ),
         const Divider(
