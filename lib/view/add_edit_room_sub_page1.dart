@@ -61,7 +61,7 @@ class AddRoomSubScreen1 extends StatelessWidget {
           const SizedBox(height: 20),
           CustomTextField(
             label: 'Description',
-            maxLines: 3,
+            maxLines: 5,
             controller: controller.descriptionController,
             validator: (value) => controller.isEmpty(value!),
           ),
@@ -77,7 +77,6 @@ class AddRoomSubScreen1 extends StatelessWidget {
               Expanded(
                 child: CustomTextField(
                   label: 'City',
-                  keyboard: TextInputType.number,
                   controller: controller.cityController,
                   validator: (value) => controller.isEmpty(value!),
                 ),

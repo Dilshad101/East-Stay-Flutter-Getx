@@ -1,4 +1,3 @@
-import 'package:east_stay_vendor/model/vendor_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -16,16 +15,21 @@ class SharedPref {
     sharedPref = await SharedPreferences.getInstance();
   }
 
-  setVendor(VendorModel vendor) async {
-    await sharedPref.setString(email, vendor.email);
-    await sharedPref.setString(token, vendor.token!);
-    await sharedPref.setString(password, vendor.password);
+  setToken(String vendorToken) async {
+    await sharedPref.setString(token, vendorToken);
   }
 
-  Future<String?> getVendor() async {
-    // final vendorMail = sharedPref.getString(email);
-    final vendorToken = sharedPref.getString(token);
-    // final vendorPassword = sharedPref.getString(password);
-    return vendorToken;
+  // setVendor(VendorModel vendor) async {
+  //   await sharedPref.setString(email, vendor.email);
+  //   await sharedPref.setString(token, vendor.token!);
+  //   await sharedPref.setString(password, vendor.password);
+  // }
+
+  signout() {
+    sharedPref.remove(email);
+    sharedPref.remove(token);
+    sharedPref.remove(password);
   }
+
+  String? getVendor() => sharedPref.getString(token);
 }

@@ -4,10 +4,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 
 class SignupSubPageProperty extends StatelessWidget {
-  const SignupSubPageProperty({
-    super.key,
-    required this.controller,
-  });
+  const SignupSubPageProperty({super.key, required this.controller});
   final RegistrationController controller;
   @override
   Widget build(BuildContext context) {

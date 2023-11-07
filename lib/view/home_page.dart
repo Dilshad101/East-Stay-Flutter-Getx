@@ -1,7 +1,7 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
+import 'package:east_stay_vendor/view/drawer_page.dart';
 import 'package:east_stay_vendor/view_model/navigation_controller.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
-import 'package:east_stay_vendor/widgets/custom_app_bar.dart';
 import 'package:east_stay_vendor/widgets/home_dash_board.dart';
 import 'package:east_stay_vendor/widgets/home_room_cards.dart';
 import 'package:east_stay_vendor/widgets/recent_booking_tile.dart';
@@ -12,13 +12,19 @@ import 'package:get/get.dart';
 class ScreenHome extends StatelessWidget {
   ScreenHome({super.key});
   final vendorController = Get.find<VendorController>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    final deviceHieght = MediaQuery.sizeOf(context).height;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: CustomAppBar(),
+      key: _scaffoldKey,
+      drawer: const AppDrawer(),
+      drawerEnableOpenDragGesture: true,
+      appBar: 
+      AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: Colors.black),
+          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+        ),
       ),
       body: ListView(
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
@@ -45,7 +51,7 @@ class ScreenHome extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           //Rooms
-          HomeRooms( deviceHieght: deviceHieght),
+          const HomeRooms(),
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,14 +70,38 @@ class ScreenHome extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(height: 10),
-          const RecentBookingTile(),
-          const SizedBox(height: 5),
-          const RecentBookingTile(),
-          const SizedBox(height: 5),
-          const RecentBookingTile(),
+          recentBookings()
         ],
       ),
+    );
+  }
+
+  Widget recentBookings() {
+    return GetBuilder<VendorController>(
+      builder: (controller) => controller.bookedRooms.isEmpty
+          ? const SizedBox(
+              height: 180,
+              child: Center(
+                  child: Text(
+                "You don't have any Bookings",
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                  wordSpacing: 2,
+                ),
+              )),
+            )
+          : ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) =>
+                  RecentBookingTile(bookedRoom: controller.bookedRooms[index]),
+              separatorBuilder: (context, index) => const SizedBox(height: 5),
+              itemCount: controller.bookedRooms.length < 4
+                  ? controller.bookedRooms.length
+                  : 4,
+            ),
     );
   }
 }

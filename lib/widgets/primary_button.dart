@@ -1,4 +1,4 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {

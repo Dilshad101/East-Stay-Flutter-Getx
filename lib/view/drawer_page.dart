@@ -1,48 +1,27 @@
+import 'package:east_stay_vendor/services/shared_pref.dart';
 import 'package:east_stay_vendor/view/coupon_page.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
 import 'package:east_stay_vendor/view/profile_page.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_popup.dart';
 import 'package:east_stay_vendor/widgets/custom_settings_tile.dart';
+import 'package:east_stay_vendor/widgets/vendor_profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ScreenSettings extends StatelessWidget {
-  ScreenSettings({super.key});
-  final vendor = Get.find<VendorController>().vendor;
+class AppDrawer extends StatelessWidget {
+  const AppDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return SafeArea(
+      child: Drawer(
         child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           children: [
             const SizedBox(height: 40),
-            Row(
-              children: [
-                Container(
-                  height: 90,
-                  width: 100,
-                  margin: const EdgeInsets.only(left: 15),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    color: Colors.grey,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Obx(
-                  () => Text(
-                    vendor.value.name,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 40),
+            VendorProfile(),
+            const SizedBox(height: 20),
             CustomSettingsTile(
               title: "Your Profile",
               ontap: () {
@@ -61,7 +40,9 @@ class ScreenSettings extends StatelessWidget {
             const SizedBox(height: 10),
             CustomSettingsTile(
               title: "App Info",
-              ontap: () {},
+              ontap: () {
+                Get.find<VendorController>().getDashBoardData();
+              },
               icon: Icons.info_outline,
             ),
             const SizedBox(height: 10),
@@ -85,6 +66,7 @@ class ScreenSettings extends StatelessWidget {
                   subtitle: 'Sign out your account',
                   buttonText: 'Sign out',
                   onProceed: () {
+                    SharedPref.instence.signout();
                     Get.offUntil(
                       MaterialPageRoute(builder: (_) => ScreenLogin()),
                       (route) => false,

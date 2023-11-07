@@ -45,6 +45,7 @@ class KeyValueText extends StatelessWidget {
             color: color2,
             fontFamily: fontFamily ?? 'Poppins',
           ),
+          overflow: TextOverflow.ellipsis,
         )
       ],
     );

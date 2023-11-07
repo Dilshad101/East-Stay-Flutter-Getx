@@ -28,12 +28,17 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  cached_network_image: ^3.3.0
   calendar_date_picker2: ^0.5.3
   card_swiper: ^3.0.1
   cupertino_icons: ^1.0.2
   dropdown_button2: ^2.3.9
+  either_dart: ^1.0.0
+  firebase_core: ^2.17.0
+  firebase_storage: ^11.2.8
   flutter:
     sdk: flutter
+  flutter_slidable: ^3.0.0
   flutter_svg: ^2.0.7
   get: ^4.6.6
   http: ^1.1.0

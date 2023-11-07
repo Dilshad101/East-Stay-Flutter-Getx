@@ -1,10 +1,14 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:east_stay_vendor/services/api_services.dart';
+import 'package:east_stay_vendor/repositories/profile_repo.dart';
+import 'package:east_stay_vendor/services/firebase_services.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
+import 'package:east_stay_vendor/widgets/snackbar_messenger.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfileController extends GetxController {
   final nameController = TextEditingController();
@@ -12,42 +16,58 @@ class ProfileController extends GetxController {
   final locationController = TextEditingController();
   final propertyController = TextEditingController();
   final editFormKey = GlobalKey<FormState>();
-  final _api = Api.instance;
 
   File? profileImage;
-
+  XFile? profile;
+  String? imageUrl;
   final vendorController = Get.find<VendorController>();
 
-  void validateFields() async {
+  void updateUserInfo() async {
     if (editFormKey.currentState!.validate()) {
+      imageUrl = vendorController.vendor.value.image;
+      if (profile != null && profileImage != null) {
+        try {
+          final url = await Services.getImageUrl(profileImage!, profile!.name);
+          imageUrl = url;
+        } catch (e) {
+          Get.showSnackbar(getxSnackbar(
+              message: "Profile image upload failed", isError: true));
+        }
+      }
       final data = {
         'name': nameController.text.trim(),
         'email': emailController.text.trim(),
-        'image': profileImage?.path ?? '',
+        'image': imageUrl,
         'propertyName': propertyController.text.trim(),
         'propertyLocation': locationController.text.trim(),
       };
-      final response =
-          await _api.editVendor(data, vendorController.vendor.value.token!);
-
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        if (result['status'] == 'success') {
+      final either = ProfileRepo().updateVendorInfo(data);
+      either.fold((error) {
+        Get.showSnackbar(getxSnackbar(message: error.message, isError: T));
+      }, (response) {
+        if (response['status'] == 'success') {
           vendorController.vendor.value.name = nameController.text.trim();
           vendorController.vendor.value.email = emailController.text.trim();
+          vendorController.vendor.value.image = imageUrl;
           vendorController.vendor.value.propertyName =
               propertyController.text.trim();
           vendorController.vendor.value.propertyLocation =
               locationController.text.trim();
           vendorController.vendor.refresh();
           Get.back();
+          Get.showSnackbar(getxSnackbar(
+              message: 'Profile updated successfully', isError: F));
+        } else {
+          Get.showSnackbar(
+              getxSnackbar(message: 'Something went wrong', isError: T));
         }
-      }
+      });
     }
   }
 
-  void setProfileImage(String imagePath) {
-    profileImage = File(imagePath);
+  void setProfileImage(XFile img) {
+    profile = img;
+    profileImage = File(img.path);
     update();
   }
 

@@ -1,5 +1,5 @@
 import 'package:east_stay_vendor/model/room_model.dart';
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view_model/room_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_button.dart';
 import 'package:east_stay_vendor/widgets/loading_button.dart';

@@ -1,7 +1,5 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
-import 'package:east_stay_vendor/view/booked_room_details_page.dart';
+import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/booked_room_detail_tile.dart';
-import 'package:east_stay_vendor/widgets/custom_key_value_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,28 +9,25 @@ class ScreenBookingDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Booking Details"),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.search_rounded,
-                color: Colors.black87,
-              )),
-          const SizedBox(
-            width: 15,
-          )
-        ],
-      ),
-      body: SizedBox(
-        width: MediaQuery.sizeOf(context).width,
-        child: ListView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          children: const [
-            BookingDetailsTile()
-          ],
-        ),
+      appBar: AppBar(title: const Text("Booking Details")),
+      body: GetBuilder<VendorController>(
+        builder: (controller) => controller.bookedRooms.isEmpty
+            ? const Center(
+                child: Text(
+                "You don't have any Bookings",
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.grey,
+                ),
+              ))
+            : ListView.separated(
+                padding: const EdgeInsets.all(20),
+                itemBuilder: (context, index) => BookingDetailsTile(
+                    bookedRoom: controller.bookedRooms[index]),
+                separatorBuilder: (context, index) => const SizedBox(height: 8),
+                itemCount: controller.bookedRooms.length,
+              ),
       ),
     );
   }

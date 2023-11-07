@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "295384455630",
+    "project_id": "east-stay",
+    "storage_bucket": "east-stay.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:295384455630:android:5d3682d6bf8c7f2436739f",
+        "android_client_info": {
+          "package_name": "com.example.east_stay_vendor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFu_2OMvL-umrUZOR8Y_7G845_JkfMT7o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

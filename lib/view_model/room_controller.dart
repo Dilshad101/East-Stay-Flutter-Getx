@@ -1,22 +1,27 @@
-import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:east_stay_vendor/model/room_model.dart';
-import 'package:east_stay_vendor/services/api_services.dart';
+import 'package:east_stay_vendor/repositories/room_repo.dart';
+import 'package:east_stay_vendor/services/firebase_services.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/snackbar_messenger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RoomController extends GetxController {
   RoomController({this.room});
   final Rx<RoomView>? room;
+  List? urlList = [];
   Rx<bool> showLoading = false.obs;
   double progressValue = 0.5;
   final List<String> amenities = ['Wifi', 'AC', 'TV', 'Kitchen'];
   List<String> selectedAmenities = [];
-  List<String> uploadedImages = [];
+  List<XFile> images = [];
   Rx<String> selectedCategory = 'Classic'.obs;
   final roomkey = GlobalKey<FormState>();
+  final propertyType = TextEditingController();
   final zipController = TextEditingController();
   final cityController = TextEditingController();
   final stateController = TextEditingController();
@@ -25,12 +30,13 @@ class RoomController extends GetxController {
   final capacityController = TextEditingController();
   final totalRoomController = TextEditingController();
   final descriptionController = TextEditingController();
-  final propertyType = TextEditingController();
-
   final vendorController = Get.find<VendorController>();
+
   bool validatekey() => roomkey.currentState!.validate();
 
   addRoom({required bool isEdit}) async {
+    List imageUrl = [];
+
     showLoading.value = true;
     if (selectedAmenities.isEmpty) {
       Get.showSnackbar(
@@ -42,16 +48,54 @@ class RoomController extends GetxController {
       );
       showLoading.value = false;
       return;
-    } else if (uploadedImages.isEmpty) {
-      Get.showSnackbar(
-        getxSnackbar(
-          message: 'Please Select your Room photos',
-          isError: true,
-          title: 'Warning',
-        ),
-      );
-      showLoading.value = false;
-      return;
+    }
+//validation in edit mode//
+    if (isEdit) {
+      if (images.length + urlList!.length > 4) {
+        Get.showSnackbar(
+          getxSnackbar(
+            message: 'You can only select upto 4 images',
+            isError: true,
+            title: 'Warning',
+          ),
+        );
+        showLoading.value = false;
+        return;
+      } else if (images.length + urlList!.length < 4) {
+        Get.showSnackbar(
+          getxSnackbar(
+            message: 'Room need 4 images',
+            isError: true,
+            title: 'Warning',
+          ),
+        );
+        showLoading.value = false;
+        return;
+      } else if (images.isNotEmpty) {
+        for (var img in images) {
+          imageUrl.add(await Services.getImageUrl(File(img.path), img.name));
+        }
+        urlList!.addAll(imageUrl);
+        // imageUrl = urlList!;
+      }
+// validation in add room//;
+    } else if (!isEdit) {
+      if (images.isEmpty || images.length < 4) {
+        Get.showSnackbar(
+          getxSnackbar(
+            message: 'Room need 4 photos',
+            isError: true,
+            title: 'Warning',
+          ),
+        );
+        showLoading.value = false;
+
+        return;
+      }
+      for (var img in images) {
+        imageUrl.add(
+            await Services.getImageUrl(File(img.path), generateUniqueID()));
+      }
     }
 
     final Map roomDetails = {
@@ -67,7 +111,7 @@ class RoomController extends GetxController {
       'zip': zipController.text.trim(),
       'description': descriptionController.text.trim(),
       'amenities': selectedAmenities,
-      'image': uploadedImages,
+      'image': imageUrl,
       'category': selectedCategory.value,
       'location': vendorController.vendor.value.propertyLocation,
       'parking': 'nill',
@@ -75,72 +119,72 @@ class RoomController extends GetxController {
       'longitude': '2.294351',
       'latitude': 48.858844,
     };
-    final token = vendorController.vendor.value.token!;
 
     if (!isEdit) {
-      final result = await Api.instance.addRoom(roomDetails, token);
-
-      if (result['status'] == 'success') {
-        await vendorController.getVendorRooms();
-        Get.back();
-        Get.showSnackbar(
-            getxSnackbar(message: 'Room added successfully', isError: false));
-      } else {
-        Get.showSnackbar(getxSnackbar(
-            message: 'Oops . Something went wrong', isError: true));
-      }
-      showLoading.value = false;
-    } else {
-      try {
-        final response =
-            await Api.instance.updateRoom(token, roomDetails, room!.value.id);
-        if (response.statusCode == 200) {
-          final status = jsonDecode(response.body);
-          if (status['status'] == 'success') {
-            room!.value.address = addressController.text.trim();
-            room!.value.adultsRate = roomRentController.text.trim();
-            room!.value.amenities = selectedAmenities;
-            room!.value.capacity = capacityController.text.trim();
-            room!.value.category = selectedCategory.value;
-            room!.value.city = cityController.text.trim();
-            room!.value.description = descriptionController.text.trim();
-            room!.value.img = uploadedImages;
-            room!.value.price = roomRentController.text.trim();
-            room!.value.propertyType = propertyType.text.trim();
-            room!.value.state = stateController.text.trim();
-            room!.value.totalRooms = totalRoomController.text.trim();
-            room!.value.zip = zipController.text.trim();
-            room!.refresh();
-            Get.back();
-            Get.showSnackbar(getxSnackbar(
-                message: 'Room updated successfully', isError: false));
-          }
+      final either = await RoomRepo().addRoom(roomDetails);
+      either.fold((error) {
+        Get.showSnackbar(getxSnackbar(message: error.message, isError: true));
+      }, (response) async {
+        if (response['status'] == 'success') {
+          await vendorController.getVendorRooms();
+          showLoading.value = false;
+          Get.back();
+          Get.showSnackbar(
+              getxSnackbar(message: 'Room added successfully', isError: false));
+        } else {
+          showLoading.value = false;
+          Get.showSnackbar(
+              getxSnackbar(message: 'Something went wrong', isError: true));
         }
-      } catch (e) {
-        Get.showSnackbar(getxSnackbar(
-            message: 'Oops something went wrong !!', isError: true));
-      }
+      });
+    } else {
+      final either = await RoomRepo().updateRoom(roomDetails, room!.value.id);
+      either.fold((error) {
+        Get.showSnackbar(getxSnackbar(message: error.message, isError: true));
+      }, (response) {
+        if (response['status'] == 'success') {
+          room!.value.address = addressController.text.trim();
+          room!.value.adultsRate = roomRentController.text.trim();
+          room!.value.amenities = selectedAmenities;
+          room!.value.capacity = capacityController.text.trim();
+          room!.value.category = selectedCategory.value;
+          room!.value.city = cityController.text.trim();
+          room!.value.description = descriptionController.text.trim();
+          room!.value.img = urlList!;
+          room!.value.price = roomRentController.text.trim();
+          room!.value.propertyType = propertyType.text.trim();
+          room!.value.state = stateController.text.trim();
+          room!.value.totalRooms = totalRoomController.text.trim();
+          room!.value.zip = zipController.text.trim();
+          room!.refresh();
+          Get.back();
+          Get.showSnackbar(getxSnackbar(
+              message: 'Room updated successfully', isError: false));
+        }
+      });
       showLoading.value = false;
     }
   }
 
-  
-  deleteRoom(String roomId, String token) async {
-    try {
-      final response = await Api.instance.deleteRoom(token, roomId);
-      final result = jsonDecode(response.body);
-      if (response.statusCode == 200 && result['status'] == 'success') {
+  deleteRoom(String roomId) async {
+    final either = await RoomRepo().deleteRoom(roomId);
+    either.fold((error) {
+      Get.showSnackbar(getxSnackbar(message: error.message, isError: true));
+    }, (response) {
+      if (response['status'] == 'success') {
         vendorController.vendorRooms
             .removeWhere((room) => room.value.id == roomId);
         vendorController.update();
         Get.back();
         Get.showSnackbar(
-            getxSnackbar(message: result['message'], isError: false));
+            getxSnackbar(message: response['message'], isError: false));
+      } else {
+        Get.showSnackbar(getxSnackbar(
+          message: response['message'] ?? 'Something went wrong',
+          isError: true,
+        ));
       }
-    } catch (e) {
-      Get.showSnackbar(
-          getxSnackbar(message: "Oops Something went wrong", isError: true));
-    }
+    });
   }
 
   String? isEmpty(String value) {
@@ -150,59 +194,77 @@ class RoomController extends GetxController {
 
   String? isNumber(String value) {
     final reg = RegExp(r'[^0-9-]');
-    if (value.isEmpty) {
-      return 'Field is required';
-    } else if (reg.hasMatch(value)) {
-      return 'Only numbers are allowed';
-    }
+    if (value.isEmpty) return 'Field is required';
+    if (reg.hasMatch(value)) return 'Only numbers are allowed';
     return null;
   }
 
   updateProgress({required bool isUpdateed}) {
-    if (isUpdateed) {
-      progressValue += .5;
-    } else {
-      progressValue -= .5;
-    }
+    isUpdateed ? progressValue += .5 : progressValue -= .5;
     update();
   }
 
   updateAmenities({required int index, required bool isAdd}) {
-    if (isAdd) {
-      selectedAmenities.add(amenities[index]);
-    } else {
-      selectedAmenities.removeWhere((element) => element == amenities[index]);
+    isAdd
+        ? selectedAmenities.add(amenities[index])
+        : selectedAmenities
+            .removeWhere((element) => element == amenities[index]);
+    update();
+  }
+
+  addImage({bool edit = false}) async {
+    if (edit || urlList!.length >= 4) {
+      Get.showSnackbar(getxSnackbar(
+          message: 'Please delete some old images', isError: true));
+      return;
+    }
+
+    final imagepaths = await ImagePicker().pickMultiImage();
+    if (imagepaths.length > 4 || imagepaths.length + images.length > 4) {
+      Get.showSnackbar(getxSnackbar(
+          message: 'Only 4 images can be selected', isError: true));
+      return;
+    } else if (edit || urlList!.length + imagepaths.length > 4) {
+      Get.showSnackbar(getxSnackbar(
+          message: 'Only 4 images can be selected', isError: true));
+      return;
+    }
+    for (var i in imagepaths) {
+      images.add(i);
     }
     update();
   }
 
-  updateImageList({required String imagePath, required bool isAdd}) {
-    if (isAdd) {
-      uploadedImages.add(imagePath);
-    } else {
-      uploadedImages.removeWhere((element) => element == imagePath);
-    }
+  removeImage(XFile image) {
+    images.removeWhere((element) => element == image);
     update();
   }
-
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
     if (room != null) {
+      urlList!.addAll(room!.value.img);
       zipController.text = room!.value.zip;
       cityController.text = room!.value.city;
       stateController.text = room!.value.state;
       roomRentController.text = room!.value.price;
       propertyType.text = room!.value.propertyType;
-      addressController.text = room!.value.address;
+      addressController.text = room!.value.address??'';
       capacityController.text = room!.value.capacity;
       totalRoomController.text = room!.value.totalRooms;
       descriptionController.text = room!.value.description;
       selectedAmenities = room!.value.amenities;
       selectedCategory = room!.value.category.obs;
-      uploadedImages = room!.value.img;
-    }
+      //when edit room there is no xfile in this room so declare that as empty list
+      images = [];
+    } else {}
+  }
+
+  String generateUniqueID() {
+    final timestamp = DateTime.now().millisecondsSinceEpoch;
+    final random = Random().nextInt(1000000);
+    return '$timestamp-$random';
   }
 
   @override

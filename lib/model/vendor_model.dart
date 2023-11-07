@@ -34,13 +34,15 @@ class VendorModel {
         token: json["token"],
         isbanned: json['isBanned'] ?? false,
       );
- static Map<String, dynamic> tojson(VendorModel vendor) => {
+
+  static Map<String, dynamic> tojson(VendorModel vendor) => {
+        '_id': vendor.id,
         'name': vendor.name,
         'email': vendor.email,
         'password': vendor.password,
         'phone': vendor.phone,
         'propertyName': vendor.propertyName,
-        'popertyLocation': vendor.propertyLocation,
+        'propertyLocation': vendor.propertyLocation,
         'image': vendor.image,
         'token': vendor.token,
         'isBanned': vendor.isbanned,

@@ -1,8 +1,5 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:east_stay_vendor/model/vendor_model.dart';
-import 'package:east_stay_vendor/services/api_services.dart';
+import 'package:east_stay_vendor/repositories/auth_repo.dart';
+import 'package:east_stay_vendor/services/shared_pref.dart';
 import 'package:east_stay_vendor/view/navigation_page.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:flutter/material.dart';
@@ -22,8 +19,8 @@ class RegistrationController extends GetxController {
   late final TextEditingController propertyLocationController;
   late final TextEditingController mobileController;
   final showLoading = false.obs;
-  final api = Api.instance;
   bool passwordCompleted = false;
+  final vendrocontroller = Get.find<VendorController>();
   @override
   void onInit() {
     super.onInit();
@@ -47,51 +44,31 @@ class RegistrationController extends GetxController {
         'propertyName': propertyNameController.text.trim(),
         'propertyLocation': propertyLocationController.text.trim(),
       };
-      try {
-        showLoading.value = true;
-        final response = await Api.instance.signupVendor(vendorData);
+      showLoading.value = true;
+      final either = await AuthRepo().signupVendor(vendorData);
+      either.fold((error) {
+        Get.showSnackbar(getxSnackbar(message: error.message, isError: true));
+      }, (response) async {
         if (response['status'] == 'success') {
-          final String token = response['token'];
-
-          final result = await api.getVendorData(token);
-          if (result.statusCode == 200) {
-            final vendorData = jsonDecode(result.body);
-            final vendor = VendorModel.fromJson(vendorData['vendorDetails'])
-              ..token = token;
-            Get.find<VendorController>().setVendor(vendor);
+          final token = response['token'];
+          await SharedPref.instence.setToken(token);
+          final data = await vendrocontroller.getVendorData(token);
+          if (data!=null) {
             Get.off(() => ScreenParent());
             Get.showSnackbar(getxSnackbar(
-              message: 'Account created successfully',
-              isError: F,
-            ));
-            showLoading.value = false;
+                message: 'Account created successfully', isError: F));
+            showLoading.value = F;
           } else {
-            showLoading.value = false;
-            Get.showSnackbar(getxSnackbar(
-              message: 'Oops, an error occurred',
-              isError: T,
-            ));
+            showLoading.value = F;
+            Get.showSnackbar(
+                getxSnackbar(message: 'Something went wrong', isError: T));
           }
         } else {
-          showLoading.value = false;
-          Get.showSnackbar(getxSnackbar(
-            message: 'Oops, an error occurred',
-            isError: T,
-          ));
+          showLoading.value = F;
+          Get.showSnackbar(
+              getxSnackbar(message: response['message'], isError: T));
         }
-      } on SocketException {
-        showLoading.value = false;
-        Get.showSnackbar(getxSnackbar(
-          message: 'Network Error: Please check your connection',
-          isError: T,
-        ));
-      } catch (e) {
-        showLoading.value = false;
-        Get.showSnackbar(getxSnackbar(
-          message: 'Oops, Something went wrong',
-          isError: T,
-        ));
-      }
+      });
     }
   }
 

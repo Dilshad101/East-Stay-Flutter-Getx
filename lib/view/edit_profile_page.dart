@@ -1,5 +1,6 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view_model/profile_controller.dart';
+import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_text_field.dart';
 import 'package:east_stay_vendor/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 class ScreenEditProfile extends StatelessWidget {
   ScreenEditProfile({super.key});
   final profileController = Get.put(ProfileController());
+  final vondorController = Get.find<VendorController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,12 +40,23 @@ class ScreenEditProfile extends StatelessWidget {
                         //profile image
                         GetBuilder<ProfileController>(
                           builder: (controller) => CircleAvatar(
-                            radius: 60,
-                            backgroundColor: Colors.grey,
-                            backgroundImage: controller.profileImage != null
-                                ? FileImage(controller.profileImage!)
-                                : null,
-                          ),
+                              radius: 60,
+                              backgroundColor: Colors.grey[400],
+                              backgroundImage: controller.profileImage != null
+                                  ? FileImage(controller.profileImage!)
+                                  : vondorController.vendor.value.image != null
+                                      ? NetworkImage(vondorController
+                                          .vendor.value.image!) as ImageProvider
+                                      : null,
+                              child: vondorController.vendor.value.image == null
+                                  ? profileController.profileImage == null
+                                      ? const Icon(
+                                          Icons.person_2,
+                                          size: 40,
+                                          color: Colors.grey,
+                                        )
+                                      : null
+                                  : null),
                         ),
 
                         Positioned(
@@ -51,17 +64,17 @@ class ScreenEditProfile extends StatelessWidget {
                           bottom: 0,
                           // circular button
                           child: CircleAvatar(
-                            radius: 19,
+                            radius: 18,
+                            backgroundColor: AppColor.textPrimary,
                             child: CircleAvatar(
-                                radius: 18,
-                                backgroundColor: Colors.white,
+                                radius: 17,
+                                backgroundColor: AppColor.backgroundColor,
                                 child: IconButton(
-                                    onPressed: () {
-                                      getProfileImage();
-                                    },
-                                    icon: const Icon(
+                                    onPressed: () => getProfileImage(),
+                                    icon: Icon(
                                       Icons.add_a_photo_outlined,
-                                      size: 20,
+                                      size: 18,
+                                      color: Colors.grey[800],
                                     ))),
                           ),
                         )
@@ -103,10 +116,7 @@ class ScreenEditProfile extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
         child: PrimaryButton(
-            onPressed: () {
-              profileController.validateFields();
-            },
-            label: 'Done'),
+            onPressed: () => profileController.updateUserInfo(), label: 'Done'),
       ),
     );
   }
@@ -114,7 +124,7 @@ class ScreenEditProfile extends StatelessWidget {
   void getProfileImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (image != null) {
-      profileController.setProfileImage(image.path);
+      profileController.setProfileImage(image);
     }
   }
 }

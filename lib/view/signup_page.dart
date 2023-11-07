@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
-import 'package:east_stay_vendor/services/api_services.dart';
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
 import 'package:east_stay_vendor/view_model/registration_controller.dart';
 import 'package:flutter/material.dart';
@@ -17,15 +16,12 @@ import 'signup_subpage_vendor.dart';
 class ScreenSignUp extends StatelessWidget {
   ScreenSignUp({super.key});
   final PageController pageController = PageController();
-  final namecontroller = TextEditingController();
-  final emailcontroller = TextEditingController();
-  final passworedcontroller = TextEditingController();
-  final confirmPasswordcontroller = TextEditingController();
-  final apiService = Api.instance;
+  // final namecontroller = TextEditingController();
+  // final emailcontroller = TextEditingController();
+  // final passworedcontroller = TextEditingController();
+  // final confirmPasswordcontroller = TextEditingController();
   bool showGoBack = false;
   final controller = Get.put(RegistrationController());
-  // final namecontroller=TextEditingController();
-  // final namecontroller=TextEditingController();
   @override
   Widget build(BuildContext context) {
     final deviceHeight =
@@ -100,9 +96,7 @@ class ScreenSignUp extends StatelessWidget {
                     controller: pageController,
                     physics: const NeverScrollableScrollPhysics(),
                     children: [
-                      SignupSubPageVendor(
-                        controller: controller,
-                      ),
+                      SignupSubPageVendor(controller: controller),
                       SignupSubPageProperty(controller: controller),
                     ],
                   ),
@@ -113,7 +107,7 @@ class ScreenSignUp extends StatelessWidget {
                   child: SmoothPageIndicator(
                     controller: pageController,
                     count: 2,
-                    effect:  const ScrollingDotsEffect(
+                    effect: const ScrollingDotsEffect(
                         activeDotColor: AppColor.primaryColor,
                         dotHeight: 10,
                         dotWidth: 10),
@@ -153,7 +147,8 @@ class ScreenSignUp extends StatelessWidget {
                               Expanded(
                                 flex: 2,
                                 child: PrimaryButton(
-                                    onPressed:()=> controller.validateVendor(),
+                                    onPressed: () =>
+                                        controller.validateVendor(),
                                     label: 'Register'),
                               ),
                             ],

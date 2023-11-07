@@ -1,4 +1,4 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/signup_page.dart';
 import 'package:east_stay_vendor/view_model/login_controller.dart';
 import 'package:east_stay_vendor/widgets/custom_text_field.dart';
@@ -108,9 +108,7 @@ class ScreenLogin extends StatelessWidget {
                 LoadingButton(
                   label: 'Continue',
                   showLoading: controller.showLoading,
-                  onPressed: () {
-                    controller.validateLogin();
-                  },
+                  onPressed: () => controller.validateLogin(),
                 ),
                 const SizedBox(height: 30),
               ],

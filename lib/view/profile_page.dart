@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:east_stay_vendor/view/edit_profile_page.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:east_stay_vendor/widgets/divider_text.dart';
@@ -8,9 +9,10 @@ import 'package:icons_plus/icons_plus.dart';
 class ScreenProfile extends StatelessWidget {
   ScreenProfile({super.key});
   final vendorController = Get.find<VendorController>();
-  
+
   @override
   Widget build(BuildContext context) {
+    print(vendorController.vendor.value.image);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -41,8 +43,30 @@ class ScreenProfile extends StatelessWidget {
                   height: 100,
                   width: 100,
                   decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(6),
+                      color: Colors.grey[400]),
+                  child: ClipRRect(
+                    clipBehavior: Clip.antiAlias,
                     borderRadius: BorderRadius.circular(6),
-                    color: Colors.yellow,
+                    child: vendorController.vendor.value.image == null
+                        ? const Icon(
+                            Icons.person_2,
+                            size: 40,
+                            color: Colors.grey,
+                          )
+                        : CachedNetworkImage(
+                            width: double.maxFinite,
+                            imageUrl: vendorController.vendor.value.image!,
+                            placeholder: (context, url) => Transform.scale(
+                                scale: .1,
+                                child: const CircularProgressIndicator(
+                                  strokeWidth: 15,
+                                  color: Colors.black,
+                                )),
+                            errorWidget: (context, url, error) =>
+                                const Icon(Icons.error),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
               ],

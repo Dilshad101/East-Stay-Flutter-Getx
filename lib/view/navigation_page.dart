@@ -1,8 +1,8 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/booked_room_page.dart';
 import 'package:east_stay_vendor/view/home_page.dart';
 import 'package:east_stay_vendor/view/room_list_page.dart';
-import 'package:east_stay_vendor/view/settings_page.dart';
+import 'package:east_stay_vendor/view/search_page.dart';
 import 'package:east_stay_vendor/view_model/navigation_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,7 +16,7 @@ class ScreenParent extends StatelessWidget {
     ScreenHome(),
     const ScreenRooms(),
     const ScreenBookingDetails(),
-     ScreenSettings()
+     ScreenSearch()
   ];
   @override
   Widget build(BuildContext context) {
@@ -41,7 +41,7 @@ class ScreenParent extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(BoxIcons.bx_notepad), label: 'Bookins'),
               BottomNavigationBarItem(
-                  icon: Icon(EvaIcons.settings_outline), label: 'Settings')
+                  icon: Icon(EvaIcons.search), label: 'Search')
             ],
           ),
         );

@@ -1,18 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:east_stay_vendor/model/room_model.dart';
 import 'package:east_stay_vendor/model/vendor_model.dart';
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/room_details_page.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class HomeRooms extends StatelessWidget {
-  const HomeRooms({
-    super.key,
-    required this.deviceHieght,
-  });
-
-  final double deviceHieght;
+  const HomeRooms({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +16,19 @@ class HomeRooms extends StatelessWidget {
       builder: (controller) {
         return controller.vendorRooms.isEmpty
             ? Container(
-                height: deviceHieght * .20,
+                height: MediaQuery.sizeOf(context).height * .20,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  color: Colors.white,
                 ),
-                child: Center(
+                child: const Center(
                     child: Text(
                   'You Haven\'t Added any Rooms',
-                  style: TextStyle(
-                    color: Colors.grey[600],
-                    letterSpacing: .8,
-                  ),
+                  style:TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
+                        wordSpacing: 2,
+                      ),
                 )),
               )
             : GridView.builder(
@@ -45,11 +42,10 @@ class HomeRooms extends StatelessWidget {
                     crossAxisSpacing: 10,
                     childAspectRatio: 1 / 1.05),
                 itemBuilder: (context, index) => roomCard(
-                  context: context,
-                  room: controller.vendorRooms[index],
-                  vendor: controller.vendor,
-                ),
-              );
+                      context: context,
+                      room: controller.vendorRooms[index],
+                      vendor: controller.vendor,
+                    ));
       },
     );
   }
@@ -76,11 +72,31 @@ class HomeRooms extends StatelessWidget {
                 Container(
                   height: MediaQuery.sizeOf(context).height * .13,
                   width: double.maxFinite,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(6),
-                        topRight: Radius.circular(6)),
-                    color: Colors.yellow,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(6),
+                      topRight: Radius.circular(6),
+                    ),
+                    color: Colors.grey[300],
+                  ),
+                  child: ClipRRect(
+                    clipBehavior: Clip.antiAlias,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(6),
+                      topRight: Radius.circular(6),
+                    ),
+                    child: CachedNetworkImage(
+                      imageUrl: room.value.img[0],
+                      placeholder: (context, url) => Transform.scale(
+                          scale: .1,
+                          child: const CircularProgressIndicator(
+                            strokeWidth: 15,
+                            color: Colors.black,
+                          )),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),

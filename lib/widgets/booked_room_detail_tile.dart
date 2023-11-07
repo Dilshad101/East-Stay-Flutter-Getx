@@ -1,4 +1,5 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/model/booking_model.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/booked_room_details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,14 +7,13 @@ import 'package:get/get.dart';
 import 'custom_key_value_text.dart';
 
 class BookingDetailsTile extends StatelessWidget {
-  const BookingDetailsTile({
-    super.key,
-  });
-
+  const BookingDetailsTile({super.key, required this.bookedRoom});
+  final BookedRoomModel bookedRoom;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Get.to(() => const ScreenBookedRoomDetails()),
+      onTap: () =>
+          Get.to(() => ScreenBookedRoomDetails(bookedRoom: bookedRoom)),
       child: Container(
         height: 110,
         width: MediaQuery.sizeOf(context).width,
@@ -30,17 +30,22 @@ class BookingDetailsTile extends StatelessWidget {
                   Container(
                     width: MediaQuery.sizeOf(context).width * .30,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(6),
+                      image: DecorationImage(
+                        image: NetworkImage(bookedRoom.room.img[0]),
+                        fit: BoxFit.cover,
+                      ),
+                      color: Colors.grey.shade300,
+                    ),
                   ),
                   const SizedBox(width: 5),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         KeyValueText(
                           text1: 'Customer',
-                          text2: 'James',
+                          text2: bookedRoom.user.name,
                           size1: 13,
                           size2: 13,
                           color1: AppColor.textPrimary,
@@ -48,10 +53,10 @@ class BookingDetailsTile extends StatelessWidget {
                           fontWeight1: FontWeight.w600,
                           fontWeight2: FontWeight.w500,
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         KeyValueText(
                           text1: 'Check in',
-                          text2: '10-9-2023',
+                          text2: bookedRoom.checkIn,
                           size1: 13,
                           size2: 11.5,
                           color1: AppColor.textPrimary,
@@ -59,10 +64,10 @@ class BookingDetailsTile extends StatelessWidget {
                           fontWeight1: FontWeight.w600,
                           fontWeight2: FontWeight.w500,
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         KeyValueText(
                           text1: 'Check out',
-                          text2: '12-9-2023',
+                          text2: bookedRoom.checkOut,
                           size1: 13,
                           size2: 11.5,
                           color1: AppColor.textPrimary,
@@ -70,10 +75,10 @@ class BookingDetailsTile extends StatelessWidget {
                           fontWeight1: FontWeight.w600,
                           fontWeight2: FontWeight.w500,
                         ),
-                        SizedBox(height: 2),
+                        const SizedBox(height: 2),
                         KeyValueText(
                           text1: 'Room rent',
-                          text2: '₹ 1300',
+                          text2: '₹ ${bookedRoom.totalAmount}',
                           fontFamily: 'Ubuntu',
                           size1: 13,
                           size2: 13,

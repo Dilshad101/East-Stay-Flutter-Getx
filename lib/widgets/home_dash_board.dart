@@ -1,4 +1,4 @@
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,47 +14,48 @@ class DashBoard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            gridTile(
-              icon: Icons.currency_rupee,
-              title: "Revenue",
-              data: vendorController.vendorRooms.length.toString(),
-              context: context,
-            ),
-            const SizedBox(width: 10),
-            gridTile(
-              icon: Icons.group_outlined,
-              title: "Customers",
-              data: 'data',
-              context: context,
-            )
-          ],
-        ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            gridTile(
-              icon: BoxIcons.bx_notepad,
-              title: "Bookings",
-              data: 'bookings',
-              context: context,
-            ),
-            const SizedBox(width: 10),
-            GetBuilder<VendorController>(builder: (_) {
-              return gridTile(
+    final dashBoard = vendorController.dashBoard;
+    return GetBuilder<VendorController>(builder: (controller) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              gridTile(
+                icon: Icons.currency_rupee,
+                title: "Revenue",
+                data: dashBoard['revenue'] ?? '0',
+                context: context,
+              ),
+              const SizedBox(width: 10),
+              gridTile(
+                icon: Icons.group_outlined,
+                title: "Customers",
+                data: dashBoard['customer'] ?? '0',
+                context: context,
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              gridTile(
+                icon: BoxIcons.bx_notepad,
+                title: "Bookings",
+                data: dashBoard['bookings'] ?? '0',
+                context: context,
+              ),
+              const SizedBox(width: 10),
+              gridTile(
                 icon: Icons.home_max_rounded,
                 title: "Rooms",
                 data: vendorController.vendorRooms.length.toString(),
                 context: context,
-              );
-            })
-          ],
-        ),
-      ],
-    );
+              )
+            ],
+          ),
+        ],
+      );
+    });
   }
 
   Expanded gridTile(
@@ -65,6 +66,7 @@ class DashBoard extends StatelessWidget {
     return Expanded(
       child: Container(
         height: MediaQuery.sizeOf(context).height * .10,
+        constraints: const BoxConstraints(minHeight: 80),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(6),
           color: Colors.white,

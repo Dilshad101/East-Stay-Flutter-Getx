@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:east_stay_vendor/model/room_model.dart';
-import 'package:east_stay_vendor/utils/constents/colors.dart';
+import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/add_edit_room_page.dart';
 import 'package:east_stay_vendor/view_model/room_controller.dart';
 import 'package:east_stay_vendor/view_model/vendor_controller.dart';
@@ -31,11 +32,21 @@ class ScreenRoomDetails extends StatelessWidget {
               children: [
                 Container(
                   height: MediaQuery.sizeOf(context).height * .4,
-                  color: Colors.green,
+                  width: double.maxFinite,
+                  color: Colors.grey[300],
                   child: Swiper(
                     itemCount: 4,
-                    itemBuilder: (context, index) => Container(
-                      color: index % 2 == 0 ? Colors.blue : Colors.yellow,
+                    itemBuilder: (context, index) => CachedNetworkImage(
+                      imageUrl: room.value.img[index],
+                      fit: BoxFit.cover,
+                      placeholder: (context, str) => Transform.scale(
+                        scale: .1,
+                        child: const CircularProgressIndicator(
+                          color: Colors.grey,
+                          strokeWidth: 10,
+                          strokeCap: StrokeCap.round,
+                        ),
+                      ),
                     ),
                     pagination: const SwiperPagination(
                       builder: DotSwiperPaginationBuilder(
@@ -212,7 +223,7 @@ class ScreenRoomDetails extends StatelessWidget {
                           onProceed: () {
                             Get.back();
                             Get.put(RoomController())
-                                .deleteRoom(room.value.id, vendor.value.token!);
+                                .deleteRoom(room.value.id);
                           },
                           onCancelled: () => Get.back());
                     }

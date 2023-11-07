@@ -3,11 +3,11 @@ import 'package:east_stay_vendor/model/vendor_model.dart';
 class RoomView {
   String id;
   VendorModel vendor;
-  String address;
+  String? address;
   String city;
   String state;
   String zip;
-  List<String> img;
+  List img;
   String propertyType;
   String description;
   String price;
@@ -16,7 +16,7 @@ class RoomView {
   String adultsRate;
   String location;
   String longitude;
-  double latitude;
+  num latitude;
   String category;
   List<String> amenities;
   bool isApproved;
@@ -48,22 +48,21 @@ class RoomView {
       id: json['_id'],
       vendor: VendorModel.fromJson(json['vendorId']),
       address: json['address'],
-      city: json['city'],
-      state: json['state'],
-      zip: json['zip'],
-      img: [],
-      /*List<String>.from(json['img']),*/
-      propertyType: json['propertyType'],
-      description: json['description'],
-      price: json['price'],
-      capacity: json['capacity'],
-      totalRooms: json['totalrooms'],
-      adultsRate: json['AdultsRate'],
-      location: json['location'],
-      longitude: json['longitude'],
-      latitude: json['latitude'],
-      category: json['category'],
-      amenities: List<String>.from(json['amenities']),
+      city: json['city'] ?? 'city',
+      state: json['state'] ?? 'state',
+      zip: json['zip'] ?? 'zip',
+      img: json['img'] as List,
+      propertyType: json['propertyType'] ?? 'propertyType',
+      description: json['description'] ?? 'description',
+      price: json['price'] ?? 'price',
+      capacity: json['capacity'] ?? 'capacity',
+      totalRooms: json['totalrooms'] ?? 'totalRooms',
+      adultsRate: json['AdultsRate'] ?? 'adult',
+      location: json['location'] ?? 'location',
+      longitude: json['longitude'] ?? 'latitude',
+      latitude: json['latitude'] ?? 9009.0,
+      category: json['category'] ?? 'cat',
+      amenities: List<String>.from(json['amenities'] ?? []),
       isApproved: json['isApproved'],
     );
   }
