@@ -3,6 +3,7 @@
 import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
 import 'package:east_stay_vendor/view_model/registration_controller.dart';
+import 'package:east_stay_vendor/widgets/loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -146,7 +147,8 @@ class ScreenSignUp extends StatelessWidget {
                               const SizedBox(width: 10),
                               Expanded(
                                 flex: 2,
-                                child: PrimaryButton(
+                                child: LoadingButton(
+                                  showLoading: controller.showLoading,
                                     onPressed: () =>
                                         controller.validateVendor(),
                                     label: 'Register'),

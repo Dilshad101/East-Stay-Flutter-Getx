@@ -18,6 +18,7 @@ class ScreenRoomDetails extends StatelessWidget {
   ScreenRoomDetails({super.key, required this.room});
   final Rx<RoomView> room;
   final vendor = Get.find<VendorController>().vendor;
+  
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(

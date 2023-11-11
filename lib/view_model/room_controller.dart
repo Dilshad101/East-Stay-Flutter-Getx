@@ -9,16 +9,20 @@ import 'package:east_stay_vendor/widgets/snackbar_messenger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:latlong2/latlong.dart';
 
 class RoomController extends GetxController {
   RoomController({this.room});
   final Rx<RoomView>? room;
+  final pos = '';
   List? urlList = [];
   Rx<bool> showLoading = false.obs;
   double progressValue = 0.5;
   final List<String> amenities = ['Wifi', 'AC', 'TV', 'Kitchen'];
   List<String> selectedAmenities = [];
   List<XFile> images = [];
+  LatLng? selectedLatLng;
+
   Rx<String> selectedCategory = 'Classic'.obs;
   final roomkey = GlobalKey<FormState>();
   final propertyType = TextEditingController();
@@ -42,6 +46,17 @@ class RoomController extends GetxController {
       Get.showSnackbar(
         getxSnackbar(
           message: 'Please Select your Amenities',
+          isError: true,
+          title: 'Warning',
+        ),
+      );
+      showLoading.value = false;
+      return;
+    }
+    if (selectedLatLng == null) {
+      Get.showSnackbar(
+        getxSnackbar(
+          message: 'Add your property location',
           isError: true,
           title: 'Warning',
         ),
@@ -116,8 +131,8 @@ class RoomController extends GetxController {
       'location': vendorController.vendor.value.propertyLocation,
       'parking': 'nill',
       'swimmingPool': 'nill',
-      'longitude': '2.294351',
-      'latitude': 48.858844,
+      'longitude': selectedLatLng!.longitude.toString(),
+      'latitude': selectedLatLng!.latitude,
     };
 
     if (!isEdit) {
@@ -156,6 +171,8 @@ class RoomController extends GetxController {
           room!.value.state = stateController.text.trim();
           room!.value.totalRooms = totalRoomController.text.trim();
           room!.value.zip = zipController.text.trim();
+          room!.value.latitude = selectedLatLng!.latitude;
+          room!.value.longitude = selectedLatLng!.longitude.toString();
           room!.refresh();
           Get.back();
           Get.showSnackbar(getxSnackbar(
@@ -250,13 +267,14 @@ class RoomController extends GetxController {
       stateController.text = room!.value.state;
       roomRentController.text = room!.value.price;
       propertyType.text = room!.value.propertyType;
-      addressController.text = room!.value.address??'';
+      addressController.text = room!.value.address ?? '';
       capacityController.text = room!.value.capacity;
       totalRoomController.text = room!.value.totalRooms;
       descriptionController.text = room!.value.description;
       selectedAmenities = room!.value.amenities;
       selectedCategory = room!.value.category.obs;
-      //when edit room there is no xfile in this room so declare that as empty list
+      selectedLatLng = LatLng(double.parse("${room!.value.latitude}"),
+          double.parse(room!.value.longitude));
       images = [];
     } else {}
   }

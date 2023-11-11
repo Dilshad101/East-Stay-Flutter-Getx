@@ -1,12 +1,15 @@
 import 'package:east_stay_vendor/utils/colors.dart';
+import 'package:east_stay_vendor/view/map_page.dart';
+import 'package:east_stay_vendor/view_model/map_controller.dart';
 import 'package:east_stay_vendor/view_model/room_controller.dart';
 import 'package:east_stay_vendor/widgets/drop_down_button.dart';
+import 'package:east_stay_vendor/widgets/image.dart';
 import 'package:east_stay_vendor/widgets/selected_images.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddRoomSubScreen2 extends StatelessWidget {
-  const AddRoomSubScreen2({
+  AddRoomSubScreen2({
     super.key,
     required this.roomController,
     required this.icons,
@@ -16,6 +19,7 @@ class AddRoomSubScreen2 extends StatelessWidget {
   final RoomController roomController;
   final List<IconData> icons;
   final List<String> items;
+  final boxController = Get.put(MapBoxController());
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +73,39 @@ class AddRoomSubScreen2 extends StatelessWidget {
         const Text('Select Location',
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500)),
         const SizedBox(height: 10),
-        Container(
-          height: 200,
-          color: Colors.yellow[400],
+        GestureDetector(
+          onTap: () => Get.to(() => ScreenMapView()),
+          child: SizedBox(
+            height: 200,
+            child: Stack(
+              children: [
+                Container(
+                  height: double.maxFinite,
+                  width: double.maxFinite,
+                  decoration: const BoxDecoration(
+                      image: DecorationImage(
+                          image: AssetImage('assets/images/map.jpg'),
+                          fit: BoxFit.cover)),
+                ),
+                Container(
+                  height: double.maxFinite,
+                  width: double.maxFinite,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    color: Colors.black.withOpacity(.7),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Tap here',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white),
+                  ),
+                )
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 20),
       ],
@@ -133,69 +167,6 @@ class AddRoomSubScreen2 extends StatelessWidget {
               ),
             ),
           ),
-        );
-      },
-    );
-  }
-}
-
-class UploadedImages extends StatelessWidget {
-  const UploadedImages({
-    super.key,
-    required this.roomController,
-  });
-
-  final RoomController roomController;
-
-  @override
-  Widget build(BuildContext context) {
-    return GetBuilder<RoomController>(
-      builder: (_) {
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            mainAxisSpacing: 5,
-            crossAxisSpacing: 5,
-          ),
-          itemCount: roomController.urlList!.length,
-          itemBuilder: (context, index) {
-            final img = roomController.urlList![index];
-            return Stack(
-              children: [
-                const SizedBox(),
-                Padding(
-                  padding: const EdgeInsets.all(6.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(6),
-                      color: Colors.grey[400],
-                      image: DecorationImage(
-                          image: NetworkImage(img), fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
-                Positioned(
-                    right: 0,
-                    top: 0,
-                    child: CircleAvatar(
-                      radius: 15,
-                      backgroundColor: Colors.black,
-                      child: IconButton(
-                          onPressed: () {
-                            roomController.urlList!
-                                .removeWhere((element) => element == img);
-                            roomController.update();
-                          },
-                          icon: const Icon(
-                            Icons.close,
-                            size: 15,
-                          )),
-                    ))
-              ],
-            );
-          },
         );
       },
     );

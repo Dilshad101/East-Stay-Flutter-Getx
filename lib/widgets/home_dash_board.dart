@@ -41,7 +41,7 @@ class DashBoard extends StatelessWidget {
               gridTile(
                 icon: BoxIcons.bx_notepad,
                 title: "Bookings",
-                data: dashBoard['bookings'] ?? '0',
+                data: dashBoard['Bookings'] ?? '0',
                 context: context,
               ),
               const SizedBox(width: 10),

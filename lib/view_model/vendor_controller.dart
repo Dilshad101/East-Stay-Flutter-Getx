@@ -62,16 +62,12 @@ class VendorController extends GetxController {
     return either.right;
   }
 
-  // addRoom(RoomView room) {
-  //   vendorRooms.add(room.obs);
-  //   update();
-  // }
-
   getDashBoardData() async {
     final either = await ProfileRepo().getDashBoardData();
     either.fold((error) {
       Get.showSnackbar(getxSnackbar(message: error.message, isError: true));
     }, (response) {
+      dashBoard['Bookings'] = response['totalBookings'].toString();
       dashBoard['revenue'] = response['bookingAmount'].toString();
       dashBoard['customer'] = response['customer'].toString();
       dashBoard['totalRooms'] = vendorRooms.length.toString();
@@ -104,6 +100,7 @@ class VendorController extends GetxController {
     }, (response) {
       final rawList = response['viewBookings'] as List;
       bookedRooms = rawList.map((e) => BookedRoomModel.fromJson(e)).toList();
+      bookedRooms = bookedRooms.where((e) => !e.isCancel).toList();
       update();
     });
   }

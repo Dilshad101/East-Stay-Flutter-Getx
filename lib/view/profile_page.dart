@@ -12,7 +12,6 @@ class ScreenProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(vendorController.vendor.value.image);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -103,8 +102,13 @@ class ScreenProfile extends StatelessWidget {
                             vendorController.vendorRooms.length.toString()),
                   ),
                 ),
-                const Expanded(
-                  child: Dividertext(title: 'Total Booking', subtilte: '15'),
+                Expanded(
+                  child: Dividertext(
+                    title: 'Total Booking',
+                    subtilte:
+                        Get.find<VendorController>().dashBoard['Bookings'] ??
+                            '0',
+                  ),
                 ),
               ],
             )

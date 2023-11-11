@@ -12,43 +12,43 @@ class ScreenRooms extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Your Rooms'),
-        // actions: [
-        //   const SizedBox(width: 10),
-        //   CircleAvatar(
-        //     backgroundColor: AppColor.primaryColor,
-        //     child: IconButton(
-        //       onPressed: () => Get.to(() => ScreenAddRoom()),
-        //       icon: const Icon(Icons.add, color: Colors.white),
-        //     ),
-        //   ),
-        //   const SizedBox(width: 15),
-        // ],
-      ),
+      appBar: AppBar(title: const Text('Your Rooms')),
       body: GetBuilder<VendorController>(
         builder: (controller) {
-          return GridView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            physics: const BouncingScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
-            itemCount: controller.vendorRooms.length,
-            itemBuilder: (context, index) => Obx(
-              () => GestureDetector(
-                onTap: () => Get.to(
-                  () => ScreenRoomDetails(room: controller.vendorRooms[index]),
-                  transition: Transition.cupertinoDialog,
-                ),
-                child: RoomGridTile(
-                  room: controller.vendorRooms[index].value,
-                ),
-              ),
-            ),
-          );
+          return controller.vendorRooms.isEmpty
+              ? const Center(
+                  child: Text(
+                  'You dont have any rooms',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey,
+                    wordSpacing: 2,
+                  ),
+                ))
+              : GridView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                  physics: const BouncingScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: controller.vendorRooms.length,
+                  itemBuilder: (context, index) => Obx(
+                    () => GestureDetector(
+                      onTap: () => Get.to(
+                        () => ScreenRoomDetails(
+                            room: controller.vendorRooms[index]),
+                        transition: Transition.cupertinoDialog,
+                      ),
+                      child: RoomGridTile(
+                        room: controller.vendorRooms[index].value,
+                      ),
+                    ),
+                  ),
+                );
         },
       ),
       floatingActionButton: FloatingActionButton.extended(

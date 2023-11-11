@@ -1,8 +1,10 @@
 import 'package:east_stay_vendor/services/shared_pref.dart';
+import 'package:east_stay_vendor/view/app_info_screen.dart';
 import 'package:east_stay_vendor/view/coupon_page.dart';
 import 'package:east_stay_vendor/view/loginpage.dart';
+import 'package:east_stay_vendor/view/privacy_policy_page.dart';
 import 'package:east_stay_vendor/view/profile_page.dart';
-import 'package:east_stay_vendor/view_model/vendor_controller.dart';
+import 'package:east_stay_vendor/view/terms_and_condition.dart';
 import 'package:east_stay_vendor/widgets/custom_popup.dart';
 import 'package:east_stay_vendor/widgets/custom_settings_tile.dart';
 import 'package:east_stay_vendor/widgets/vendor_profile_image.dart';
@@ -41,20 +43,24 @@ class AppDrawer extends StatelessWidget {
             CustomSettingsTile(
               title: "App Info",
               ontap: () {
-                Get.find<VendorController>().getDashBoardData();
+                Get.to(() => const ScreenAppInfo(),
+                    transition: Transition.topLevel);
               },
               icon: Icons.info_outline,
             ),
             const SizedBox(height: 10),
             CustomSettingsTile(
               title: "Privacy Policy",
-              ontap: () {},
+              ontap: () {
+                Get.to(() => const ScreenPrivacyPolicy(),
+                    transition: Transition.topLevel);
+              },
               icon: Icons.lock_outline_rounded,
             ),
             const SizedBox(height: 10),
             CustomSettingsTile(
               title: "Terms & condition",
-              ontap: () {},
+              ontap: () => Get.to(() => const ScreenTermsAndConditions()),
               icon: Icons.verified_user_outlined,
             ),
             const SizedBox(height: 10),

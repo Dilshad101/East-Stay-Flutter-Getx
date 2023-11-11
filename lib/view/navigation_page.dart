@@ -14,9 +14,9 @@ class ScreenParent extends StatelessWidget {
 
   final List<Widget> _screens = [
     ScreenHome(),
+    const ScreenSearch(),
     const ScreenRooms(),
     const ScreenBookingDetails(),
-     ScreenSearch()
   ];
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class ScreenParent extends StatelessWidget {
             type: BottomNavigationBarType.fixed,
             currentIndex: controller.currentPage,
             onTap: (value) => controller.changePage(value),
-            selectedItemColor:  AppColor.primaryColor,
+            selectedItemColor: AppColor.primaryColor,
             unselectedItemColor: Colors.grey[400],
             showSelectedLabels: F,
             showUnselectedLabels: F,
@@ -37,11 +37,11 @@ class ScreenParent extends StatelessWidget {
               BottomNavigationBarItem(
                   icon: Icon(BoxIcons.bx_home_alt_2), label: 'Home'),
               BottomNavigationBarItem(
+                  icon: Icon(EvaIcons.search), label: 'Search'),
+              BottomNavigationBarItem(
                   icon: Icon(BoxIcons.bx_hotel), label: 'Room'),
               BottomNavigationBarItem(
-                  icon: Icon(BoxIcons.bx_notepad), label: 'Bookins'),
-              BottomNavigationBarItem(
-                  icon: Icon(EvaIcons.search), label: 'Search')
+                  icon: Icon(BoxIcons.bx_notepad), label: 'Bookins')
             ],
           ),
         );

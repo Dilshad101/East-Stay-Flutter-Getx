@@ -111,7 +111,6 @@ class ScreenCoupon extends StatelessWidget {
               const SizedBox(height: 30),
               PrimaryButton(
                 onPressed: () {
-                  print('gont');
                   couponController.addToCouponList();
                 },
                 label: 'Create Coupon',

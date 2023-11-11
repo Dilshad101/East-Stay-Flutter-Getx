@@ -7,6 +7,7 @@ import 'package:east_stay_vendor/widgets/home_room_cards.dart';
 import 'package:east_stay_vendor/widgets/recent_booking_tile.dart';
 import 'package:east_stay_vendor/widgets/title_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ScreenHome extends StatelessWidget {
@@ -19,13 +20,7 @@ class ScreenHome extends StatelessWidget {
       key: _scaffoldKey,
       drawer: const AppDrawer(),
       drawerEnableOpenDragGesture: true,
-      appBar: 
-      AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: Colors.black),
-          onPressed: () => _scaffoldKey.currentState!.openDrawer(),
-        ),
-      ),
+      appBar: appBar(),
       body: ListView(
         padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
         physics: const BouncingScrollPhysics(),
@@ -38,7 +33,7 @@ class ScreenHome extends StatelessWidget {
             children: [
               const TitleText(title: 'Rooms'),
               GestureDetector(
-                onTap: () => Get.find<NavController>().changePage(1),
+                onTap: () => Get.find<NavController>().changePage(2),
                 child: const Text(
                   'View more',
                   style: TextStyle(
@@ -58,7 +53,7 @@ class ScreenHome extends StatelessWidget {
             children: [
               const TitleText(title: 'Recent Bookings'),
               GestureDetector(
-                onTap: () => Get.find<NavController>().changePage(2),
+                onTap: () => Get.find<NavController>().changePage(3),
                 child: const Text(
                   'View more',
                   style: TextStyle(
@@ -73,6 +68,27 @@ class ScreenHome extends StatelessWidget {
           recentBookings()
         ],
       ),
+    );
+  }
+
+  AppBar appBar() {
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.menu, color: Colors.black),
+        onPressed: () => _scaffoldKey.currentState!.openDrawer(),
+      ),
+      actions: [
+        Container(
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(vertical: 13, horizontal: 20),
+          child: SvgPicture.asset(
+            'assets/images/logo v2.svg',
+            colorFilter: const ColorFilter.mode(
+                AppColor.primaryColor, BlendMode.srcIn),
+            alignment: Alignment.centerRight,
+          ),
+        ),
+      ],
     );
   }
 

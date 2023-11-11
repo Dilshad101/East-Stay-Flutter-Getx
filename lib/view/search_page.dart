@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:east_stay_vendor/utils/colors.dart';
 import 'package:east_stay_vendor/view_model/search_controller.dart';
@@ -34,18 +33,18 @@ class _ScreenSearchState extends State<ScreenSearch>
         bottom: searchBar(),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         height: MediaQuery.sizeOf(context).height,
         child: Column(
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TabBar(
               controller: tabController,
               labelColor: AppColor.secondaryColor,
-              labelStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
               unselectedLabelColor: Colors.grey,
               indicatorColor: AppColor.primaryColor,
-              tabs: [
+              tabs: const [
                 Tab(text: 'Your Rooms'),
                 Tab(text: 'Your Bookings'),
               ],
@@ -65,7 +64,7 @@ class _ScreenSearchState extends State<ScreenSearch>
   GetBuilder<FilterController> bookingSearchView() {
     return GetBuilder<FilterController>(
       builder: (controller) => controller.filteredBookingList.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
               'No bookings available',
               style: TextStyle(
@@ -76,11 +75,11 @@ class _ScreenSearchState extends State<ScreenSearch>
               ),
             ))
           : ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
               shrinkWrap: true,
               itemBuilder: (context, index) => RecentBookingTile(
                   bookedRoom: controller.filteredBookingList[index]),
-              separatorBuilder: (context, index) => SizedBox(height: 10),
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemCount: controller.filteredBookingList.length,
             ),
     );
@@ -89,7 +88,7 @@ class _ScreenSearchState extends State<ScreenSearch>
   Widget roomSearchView() {
     return GetBuilder<FilterController>(builder: (controller) {
       return controller.filteredRoomList.isEmpty
-          ? Center(
+          ? const Center(
               child: Text(
               'No Rooms Available',
               style: TextStyle(
@@ -100,13 +99,13 @@ class _ScreenSearchState extends State<ScreenSearch>
               ),
             ))
           : ListView.separated(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 final room = controller.filteredRoomList[index].value;
                 return SearchTile(room: room);
               },
-              separatorBuilder: (context, index) => SizedBox(height: 10),
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemCount: controller.filteredRoomList.length,
             );
     });
@@ -114,7 +113,7 @@ class _ScreenSearchState extends State<ScreenSearch>
 
   PreferredSize searchBar() {
     return PreferredSize(
-      preferredSize: Size.fromHeight(60),
+      preferredSize: const Size.fromHeight(60),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
         child: SearchBar(
@@ -126,7 +125,7 @@ class _ScreenSearchState extends State<ScreenSearch>
               side: BorderSide(color: Colors.grey[300]!, width: .5),
             ),
           ),
-          textStyle: MaterialStateProperty.all(TextStyle(
+          textStyle: MaterialStateProperty.all(const TextStyle(
             fontWeight: FontWeight.w500,
             fontSize: 14,
             fontFamily: 'Poppins',
